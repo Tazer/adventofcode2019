@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -15,17 +16,43 @@ func main() {
 
 	input := string(b)
 
-	intCodes := strings.Split(input, ",")
-
-	intCodes[1] = "12"
-	intCodes[2] = "2"
-
-	res := processIntCode(intCodes)
+	res := startupIntCode("12", "2", input)
 
 	result := strings.Split(res, ",")
 
 	log.Printf("Output from IntCode computer 🖥 the value of the first output is : %s", result[0])
 
+	log.Print("Gonna find correct input")
+	n, v, err := findoutput("19690720", input)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("Noun: %d Verb: %d Correct result: %d 🔥", n, v, 100*n+v)
+
+}
+
+func findoutput(expected, input string) (int, int, error) {
+	for n := 0; n < 100; n++ {
+		for v := 0; v < 100; v++ {
+
+			res := startupIntCode(strconv.Itoa(n), strconv.Itoa(v), input)
+			result := strings.Split(res, ",")
+			if result[0] == expected {
+				return n, v, nil
+			}
+		}
+	}
+	return 0, 0, errors.New("didnt find correct output")
+}
+
+func startupIntCode(noun, verb, input string) string {
+	intCodes := strings.Split(input, ",")
+
+	intCodes[1] = noun
+	intCodes[2] = verb
+
+	return processIntCode(intCodes)
 }
 
 func processIntCode(intCodes []string) string {
@@ -34,7 +61,6 @@ func processIntCode(intCodes []string) string {
 		v := intCodes[i]
 
 		if v == "99" {
-			log.Print("Breaking the code")
 			break
 		}
 
