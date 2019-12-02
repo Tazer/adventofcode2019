@@ -51,7 +51,9 @@ func calculateFuelForModuleWithFuelMass(input int) int {
 
 	for {
 		fuel = calculateFuelForModule(fuel)
-		neededfuel += fuel
+		if fuel > 0 {
+			neededfuel += fuel
+		}
 		if fuel < 1 {
 			break
 		}
