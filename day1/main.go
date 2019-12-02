@@ -15,6 +15,7 @@ func main() {
 	defer file.Close()
 
 	totalFuel := 0
+	totalFuelWithFuelMass := 0
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -24,6 +25,7 @@ func main() {
 		}
 
 		totalFuel += calculateFuelForModule(i1)
+		totalFuelWithFuelMass += calculateFuelForModuleWithFuelMass(i1)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -31,6 +33,7 @@ func main() {
 	}
 
 	log.Printf("The total fuel needed is: %d  ✅", totalFuel)
+	log.Printf("The total fuel with fuel mass needed is: %d  ✅", totalFuelWithFuelMass)
 }
 
 func calculateFuelForModule(input int) int {
@@ -39,4 +42,20 @@ func calculateFuelForModule(input int) int {
 	s := d - 2
 
 	return s
+}
+
+func calculateFuelForModuleWithFuelMass(input int) int {
+	fuel := calculateFuelForModule(input)
+
+	neededfuel := fuel
+
+	for {
+		fuel = calculateFuelForModule(fuel)
+		neededfuel += fuel
+		if fuel < 1 {
+			break
+		}
+	}
+
+	return neededfuel
 }
