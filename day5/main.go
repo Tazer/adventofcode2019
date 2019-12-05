@@ -15,7 +15,9 @@ func main() {
 
 	input := string(b)
 
-	startupIntCode(input, 1)
+	//startupIntCode(input, 1)
+
+	startupIntCode(input, 5)
 
 	// _ := strings.Split(res, ",")
 
@@ -62,7 +64,7 @@ func processIntCode(intCodes []string, pInput int) string {
 		// 	log.Fatal(err)
 		// }
 
-		// log.Printf("v %s , pos1 %d pos2 %d pos3 %d code %s", v, pos1, pos2, pos3, processCode)
+		log.Printf("v %s , pos1 %d pos2 %d pos3 %d code %s", v, pos1, pos2, pos3, processCode)
 
 		v1code := "0"
 		v2code := "0"
@@ -79,7 +81,7 @@ func processIntCode(intCodes []string, pInput int) string {
 			// }
 		}
 
-		// log.Printf("v1code: %s v2code: %s , processcode: %s", v1code, v2code, processCode)
+		log.Printf("v1code: %s v2code: %s , processcode: %s", v1code, v2code, processCode)
 		v1 := 0
 		v2 := 0
 		if v != "4" && v != "3" {
@@ -132,14 +134,50 @@ func processIntCode(intCodes []string, pInput int) string {
 		}
 
 		if v == "4" {
-			// log.Printf("Hmm v1code %s , pos1 %d", v1code, pos1)
 			i += 2
 			if v1code == "1" {
 				log.Printf("Output: %s", pos1)
 			} else {
 				log.Printf("Output: %s", intCodes[pos1])
 			}
+		}
 
+		if v == "5" {
+			log.Printf("Hmm v1code %s , v1 %d", v1code, v1)
+			if v1 != 0 {
+				log.Printf("setting i to %d", v2)
+				i = v2
+			} else {
+				i += 3
+			}
+
+		}
+
+		if v == "6" {
+			if v1 == 0 {
+				i = v2
+			} else {
+				i += 3
+			}
+		}
+
+		if v == "7" {
+			i += 4
+			if v1 < v2 {
+				intCodes[pos3] = "1"
+			} else {
+				intCodes[pos3] = "0"
+			}
+
+		}
+
+		if v == "8" {
+			i += 4
+			if v1 == v2 {
+				intCodes[pos3] = "1"
+			} else {
+				intCodes[pos3] = "0"
+			}
 		}
 	}
 
