@@ -31,15 +31,17 @@ func startupIntCode(input string, pInput int) string {
 func processIntCode(intCodes []string, pInput int) string {
 
 	for i := 0; i < len(intCodes); {
+		processCode := intCodes[i]
 		v := intCodes[i]
+		if len(processCode) > 2 {
+			if v != "99" {
+				v = processCode[3:]
+			}
+
+		}
 
 		if v == "99" {
 			break
-		}
-
-		vI, err := strconv.Atoi(v)
-		if err != nil {
-			log.Fatal(err)
 		}
 
 		pos1, err := strconv.Atoi(intCodes[i+1])
@@ -73,12 +75,12 @@ func processIntCode(intCodes []string, pInput int) string {
 		log.Printf("v %s , pos1 %d pos2 %d pos3 %d posRes %d", v, pos1, pos2, pos3, posRes)
 
 		if v == "1" {
-			intCodes[posRes] = strconv.Itoa(v1 + v2)
+			intCodes[pos3] = strconv.Itoa(v1 + v2)
 			i += 4
 		}
 
 		if v == "2" {
-			intCodes[posRes] = strconv.Itoa(v1 * v2)
+			intCodes[pos3] = strconv.Itoa(v1 * v2)
 			i += 4
 		}
 
