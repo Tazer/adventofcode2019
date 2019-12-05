@@ -37,6 +37,11 @@ func processIntCode(intCodes []string, pInput int) string {
 			break
 		}
 
+		vI, err := strconv.Atoi(v)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		pos1, err := strconv.Atoi(intCodes[i+1])
 		if err != nil {
 			log.Fatal(err)
@@ -78,13 +83,13 @@ func processIntCode(intCodes []string, pInput int) string {
 		}
 
 		if v == "3" {
-			intCodes[posRes] = strconv.Itoa(pInput)
+			intCodes[pos1] = strconv.Itoa(pInput)
 			i += 2
 		}
 
 		if v == "4" {
 			i += 2
-			log.Printf("Output: %s", intCodes[posRes])
+			log.Printf("Output: %s", intCodes[pos1])
 		}
 	}
 
