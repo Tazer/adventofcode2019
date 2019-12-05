@@ -15,11 +15,11 @@ func main() {
 
 	input := string(b)
 
-	res := startupIntCode(input, 1)
+	startupIntCode(input, 1)
 
-	result := strings.Split(res, ",")
+	// _ := strings.Split(res, ",")
 
-	log.Printf("Output from IntCode computer 🖥 the value of the first output is : %s", result[0])
+	// log.Printf("Output from IntCode computer 🖥 the value of the first output is : %s", result[0])
 
 }
 
@@ -35,7 +35,7 @@ func processIntCode(intCodes []string, pInput int) string {
 		v := intCodes[i]
 		if len(processCode) > 2 {
 			if v != "99" {
-				v = processCode[3:]
+				v = processCode[len(processCode)-1:]
 			}
 
 		}
@@ -57,24 +57,66 @@ func processIntCode(intCodes []string, pInput int) string {
 			log.Fatal(err)
 		}
 
-		posRes, err := strconv.Atoi(intCodes[i+4])
-		if err != nil {
-			log.Fatal(err)
+		// posRes, err := strconv.Atoi(intCodes[i+4])
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+
+		// log.Printf("v %s , pos1 %d pos2 %d pos3 %d code %s", v, pos1, pos2, pos3, processCode)
+
+		v1code := "0"
+		v2code := "0"
+		//v3code := "0"
+
+		if len(processCode) > 2 {
+			v1code = string(processCode[0])
+			if len(processCode) > 3 {
+				v1code = string(processCode[1])
+				v2code = string(processCode[0])
+			}
+			// if len(processCode) > 4 {
+			// 	v3code = processCode[:5]
+			// }
 		}
 
-		v1, err := strconv.Atoi(intCodes[pos1])
-		if err != nil {
-			log.Fatal(err)
+		// log.Printf("v1code: %s v2code: %s , processcode: %s", v1code, v2code, processCode)
+		v1 := 0
+		v2 := 0
+		if v != "4" && v != "3" {
+			if v1code != "1" {
+				v1, err = strconv.Atoi(intCodes[pos1])
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+			if v2code != "1" {
+				v2, err = strconv.Atoi(intCodes[pos2])
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+
 		}
 
-		v2, err := strconv.Atoi(intCodes[pos2])
-		if err != nil {
-			log.Fatal(err)
+		// v3, err := strconv.Atoi(intCodes[pos3])
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+
+		if v1code == "1" {
+			v1 = pos1
 		}
 
-		log.Printf("v %s , pos1 %d pos2 %d pos3 %d posRes %d", v, pos1, pos2, pos3, posRes)
+		if v2code == "1" {
+			v2 = pos2
+		}
+
+		// if v3code == "1" {
+		// 	v3 = pos3
+		// }
 
 		if v == "1" {
+			// log.Printf("v1code %s values %d , %d", v1code, v1, v2)
 			intCodes[pos3] = strconv.Itoa(v1 + v2)
 			i += 4
 		}
@@ -90,8 +132,14 @@ func processIntCode(intCodes []string, pInput int) string {
 		}
 
 		if v == "4" {
+			// log.Printf("Hmm v1code %s , pos1 %d", v1code, pos1)
 			i += 2
-			log.Printf("Output: %s", intCodes[pos1])
+			if v1code == "1" {
+				log.Printf("Output: %s", pos1)
+			} else {
+				log.Printf("Output: %s", intCodes[pos1])
+			}
+
 		}
 	}
 
