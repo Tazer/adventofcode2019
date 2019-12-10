@@ -29,6 +29,21 @@ func TestCalculateOrbitConnections(t *testing.T) {
 			K)L`,
 			expected: 42,
 		},
+		{
+			name: "mixed 12 divided by 2",
+			input: `COM)B
+			B)G
+			G)H
+			D)I
+			E)J
+			B)C
+			C)D
+			D)E
+			E)F
+			J)K
+			K)L`,
+			expected: 42,
+		},
 	}
 
 	for _, c := range cases {

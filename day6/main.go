@@ -14,10 +14,15 @@ func main() {
 	}
 	defer file.Close()
 
+	inputs := []string{}
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		log.Print(scanner.Text())
+		inputs = append(inputs, scanner.Text())
 	}
+
+	res := calculateOrbitConnections(inputs)
+	log.Printf("the connetion was %d 🌚", res)
 }
 
 func calculateOrbitConnections(input []string) int {
@@ -29,35 +34,48 @@ func calculateOrbitConnections(input []string) int {
 		//a := r[0]
 		b := strings.TrimSpace(r[0])
 
-		connections++
+		added := 0
+
+		usedChars := map[string]bool{}
+
+		// connections++
 
 		// log.Printf("direct %v", r)
 
-		offset := 0
-
-		next := i - 1
-
-		for ii := next; ii >= 0; ii-- {
+		for ii := len(input) - 1; ii >= 0; ii-- {
 
 			r := strings.Split(input[ii], ")")
 
-			for iii := next - offset; iii >= 0; iii-- {
+			for iii := len(input) - 1; iii >= 0; iii-- {
 
 				r := strings.Split(input[iii], ")")
 
-				log.Printf("checking if %s is %s", r[1], b)
+				// log.Printf("checking if %s is %s", r[1], b)
+
+				if ok, _ := usedChars[b]; ok {
+					// log.Printf("skipping cause %s is already done", b)
+					continue
+				}
+
+				if input[i] == input[iii] || input[ii] == input[iii] {
+					// log.Print("Skipping same as input")
+					continue
+				}
 
 				if strings.TrimSpace(r[1]) == b {
+					usedChars[strings.TrimSpace(b)] = true
 					log.Printf("indirect %v", r)
-					connections++
+					added++
 				}
 			}
 
 			b = strings.TrimSpace(r[0])
-			offset = 1
 		}
-
+		// log.Printf("Added %d for %v", added, r)
+		connections += added
 	}
+
+	log.Printf("connetion %d", connections)
 
 	return connections
 }
